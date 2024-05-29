@@ -1,0 +1,14 @@
+.order{
+    position: relative;
+    padding: 10px;
+}
+
+.orderCloseButton{
+    background-color: inherit;
+    border: 0;
+    font-size: 32px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+}

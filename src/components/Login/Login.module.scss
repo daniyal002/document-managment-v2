@@ -1,0 +1,36 @@
+.formLogin{
+    transition: margin-top 0.2s ease;
+}
+.error {
+    margin-top: -50px; /* Изменяем margin-top при ошибке (можете выбрать подходящее значение) */
+  }
+
+#usernameInput, #passwordInput{
+    width: 100%;
+    height: 50px;
+    font-size: 25px;
+}
+
+.formItem{
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+
+    label{
+        font-size: 18px;
+    }
+}
+
+#loginSubmit{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    font-size: 20px;
+    height: 50px;
+    }
+
+#alertError{
+    margin-top: 20px;
+}

@@ -1,0 +1,46 @@
+.orderProductTable{
+    margin-top: 10px;
+}
+
+.orderProductTableSelection{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    @media screen and (max-width:850px) {
+        flex-direction: column;
+    }
+}
+.tableMaxWidth{
+    width: 100%;
+}
+.table{
+    width: 70%;
+    @media screen and (max-width:850px) {
+        width: 100%;
+    }
+}
+
+.orderProductTableAction{
+    display: flex;
+    flex-direction: row;
+    gap:15px;
+
+    @media screen and (max-width:614px) {
+        flex-direction: column;
+    }
+}
+
+#orderProductTableActionButton{
+    display: none;
+    @media screen and (max-width:575px) {
+        display: block;
+    }
+}
+
+#orderProductTableFooterLabel{
+    font-size: 16px;
+}
+#orderProductTableFooterInput{
+    width: 80px;
+}

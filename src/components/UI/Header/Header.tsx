@@ -52,7 +52,7 @@ const {push} = useRouter()
   return(
     <>
       {contextHolder}
-      <Menu onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items} />;
+      <Menu onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items} />
     </>
   ) 
 };

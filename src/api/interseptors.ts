@@ -2,7 +2,7 @@ import { getAccessToken, removeFromStorage } from '@/services/auth-token.service
 import axios, {type CreateAxiosDefaults} from 'axios'
 
 const options:CreateAxiosDefaults = {
-    baseURL:"http://192.168.30.130:8000",
+    baseURL:"http://192.168.30.194:8000",
     headers:{
         'Content-Type': 'application/json',
     },

@@ -1,19 +1,18 @@
-import { IProduct } from "@/interface/product"
+import { IProductUnit } from "@/interface/product"
 import { create } from "zustand"
 
 interface IProductStore{
-    products: IProduct[]
-    searchProducts:IProduct[]
-    setSearchProducts:(array:IProduct[]) => void
+    products: IProductUnit[]
+    setProducts: (newProductUnit:IProductUnit[]) => void
+    searchProducts:IProductUnit[]
+    setSearchProducts:(array:IProductUnit[]) => void
 }
 
 export const useProductStore = create<IProductStore>((set) =>({
-    products:[
-        {id:1, name:"Товар 1",basicUnit:{id:1,name:"шт",fullName:"штука"}},
-        {id:2, name:"Товар 2",basicUnit:{id:2,name:"уп",fullName:"упаковка"}},
-        {id:3, name:"Товар 3",basicUnit:{id:2,name:"уп",fullName:"упаковка"}},
-        {id:4, name:"Товар 4",basicUnit:{id:3,name:"ящ",fullName:"ящик"}},
-    ],
+    products:[],
+    setProducts(newProductUnit){
+        set({products:newProductUnit})
+    },
     searchProducts:[],
     setSearchProducts(array) {
         set({searchProducts:array})

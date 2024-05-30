@@ -41,7 +41,7 @@ export function SummaryOrderTable({keyTab}:Props){
           key: 'initiator',
           sorter: (a:IOrderItem, b:IOrderItem) => compareByFullName(a.initiator as IEmployee, b.initiator as IEmployee),
           ellipsis: true,
-          render: (initiator:IEmployee) => `${initiator.last_name} ${initiator.first_name} ${initiator.middle_name}` 
+          render: (initiator:IEmployee) => `${initiator?.last_name} ${initiator?.first_name} ${initiator?.middle_name}` 
         },
         {
           title: 'Кабинет',
@@ -93,7 +93,7 @@ export function SummaryOrderTable({keyTab}:Props){
         setIsModalOpen(true);
       };
   
-      const handleOk = (unitProductTable:string, count:number) => {
+      const handleOk = (unitProductTable:number, count:number) => {
         setIsModalOpen(false);
         updateProductInOrder(keyTab,Number(orderId),Number(productInOrderId),unitProductTable,count)
       };

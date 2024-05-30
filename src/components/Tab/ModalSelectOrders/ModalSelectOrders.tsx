@@ -74,7 +74,7 @@ export function ModalSelectOrders({isModalOpen, handleOk, handleCancel}:Props){
           key: 'initiator',
           sorter: (a:IOrderItem, b:IOrderItem) => compareByFullName(a.initiator as IEmployee, b.initiator as IEmployee),
           ellipsis: true,
-          render: (initiator:IEmployee) => `${initiator.last_name} ${initiator.first_name} ${initiator.middle_name}`,
+          render: (initiator:IEmployee) => `${initiator?.last_name} ${initiator?.first_name} ${initiator?.middle_name}`,
           responsive:['sm']
         },
         {

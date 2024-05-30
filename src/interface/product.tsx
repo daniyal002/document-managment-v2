@@ -1,4 +1,5 @@
 import { IBasicUnit } from "./basicUnit";
+import { IUnit } from "./unit";
 
 export interface IProduct{
     id?:number,
@@ -7,6 +8,19 @@ export interface IProduct{
     unit_measurement:IBasicUnit
 }
 
+interface IProductGroup{
+    id:1,
+    name:string
+}
+
+export interface IProductUnit{
+    product_id: number,
+    product_name: string,
+    unit_measurement: IBasicUnit,
+    product_group: IProductGroup
+    directory_unit_measurement:IUnit[]
+}
+
 export interface IProductResponse{
-    detail:IProduct[]
+    detail:IProductUnit[]
 }

@@ -1,5 +1,5 @@
 import { Selector } from "@/components/UI/Select/Selector";
-import { IProduct } from "@/interface/product";
+import { IProduct, IProductUnit } from "@/interface/product";
 import { useUnitStore } from "@/store/UnitStore/UnitStore";
 import {Button, Input, InputProps, Modal, SelectProps, Typography } from "antd";
 import { useEffect, useState } from "react";
@@ -7,25 +7,24 @@ import { useEffect, useState } from "react";
 
 interface Props{
   defaultValuesCount?:number
-  defaultValuesUnit?:string
+  defaultValuesUnit?:number
     type?:string
     isModalOpen:any
     handleOk:any
     handleCancel:any
-    product:IProduct
+    product:IProductUnit
 }
 
 export function OrderModal({isModalOpen, handleOk, handleCancel, product, type,defaultValuesCount,defaultValuesUnit}:Props){
 
-  const unites = useUnitStore(state => state.unites)
-  const newUnites = unites.filter(item=>item.product.id == product.id)
-  const options = newUnites.map(item=>({
-      value: item.name,
-      label: item.name,
+
+  const options = product?.directory_unit_measurement?.map(item=>({
+      value: item?.unit_measurement?.id,
+      label: item?.unit_measurement?.name
   })) 
 
-  const [selectUnit, setSelectUnit] = useState<String>(options[0].value);
-  const [enterCount, setEnterCount] = useState<Number>(1);
+  const [selectUnit, setSelectUnit] = useState<number>();
+  const [enterCount, setEnterCount] = useState<number>(1);
 
 
   useEffect(() => {
@@ -51,14 +50,14 @@ export function OrderModal({isModalOpen, handleOk, handleCancel, product, type,d
   
   const onOk = () => {
     handleOk(selectUnit, enterCount)
-    setSelectUnit(options[0].value);
+    setSelectUnit(undefined);
     setEnterCount(1);
   };
 
   return (
     <>
       
-    <Modal title={`${type} товара: ${product.name}`} open={isModalOpen} onOk={()=>onOk()} onCancel={handleCancel}  footer={(_) => (
+    <Modal title={`${type} товара: ${product?.product_name}`} open={isModalOpen} onOk={()=>onOk()} onCancel={handleCancel}  footer={(_) => (
           <>
             <Button onClick={()=>onOk()}>{type == "Изменение" ? "Изменить" : "Добавить" }</Button>
             <Button onClick={handleCancel}>Закрыть</Button>
@@ -71,7 +70,7 @@ export function OrderModal({isModalOpen, handleOk, handleCancel, product, type,d
 
         <div>
             <Typography.Title level={5}>Единица измерения</Typography.Title>
-            <Selector onChange={onChangeSelect} optionArray={options} placeholder="Выберите единицу измерения" value={Number(selectUnit)}/>
+            <Selector onChange={onChangeSelect} optionArray={options} placeholder="Выберите единицу измерения" value={selectUnit ? selectUnit : null}/>
         </div>
       </Modal>
     </>

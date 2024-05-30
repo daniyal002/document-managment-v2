@@ -47,7 +47,7 @@ export function OrderProductTable({setOrderProductTable,keyTab,getOrderById}:Pro
       setIsModalOpen(true);
     };
 
-    const handleOk = (unitProductTable:string, count:number) => {
+    const handleOk = (unitProductTable:number, count:number) => {
       setIsModalOpen(false);
       updateProductInTable(keyTab,Number(productInTable.id),unitProductTable,count)
     };
@@ -62,9 +62,9 @@ export function OrderProductTable({setOrderProductTable,keyTab,getOrderById}:Pro
           dataIndex: 'product',
           key: 'product',
           sorter: {
-            compare: (a:any, b:any) => a.product.name.localeCompare(b.product.name, 'ru'),
+            compare: (a:any, b:any) => a.product.product_name.localeCompare(b.product.product_name, 'ru'),
           },
-          render: (product:IProduct) => product.name
+          render: (product:IProduct) => product.product_name
         },
         
         {
@@ -94,7 +94,7 @@ export function OrderProductTable({setOrderProductTable,keyTab,getOrderById}:Pro
                 <div className={style.orderProductTableAction}>
                 <Button onClick={()=>{setProductInTable(record);showModal()}}>Изменить</Button>
                 <Button onClick={()=>deleteProductInTable(keyTab,record.id)}>Удалить</Button>
-                <Button onClick={() => openNotification('top', record.product.name, record.unitProductTable, record.count)}id={style.orderProductTableActionButton}>Подробнее</Button>
+                <Button onClick={() => openNotification('top', record.product.product_name, record.unitProductTable, record.count)}id={style.orderProductTableActionButton}>Подробнее</Button>
                 </div>
             </Space>
             ),

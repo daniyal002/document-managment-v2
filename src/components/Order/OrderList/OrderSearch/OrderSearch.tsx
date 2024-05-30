@@ -18,7 +18,7 @@ const setSearchOrders = useOrderStore((state) => state.setSearchOrders);
           const regex = new RegExp(value.split('').join('.*'), 'i');
           setSearchOrders(orders.filter(data => {
             // Create a combined name string
-            const fullName = `${data.initiator?.lastName} ${data.initiator?.firstName} ${data.initiator?.middleName}`;
+            const fullName = `${data.initiator?.last_name} ${data.initiator?.first_name} ${data.initiator?.middle_name}`;
       
             // Check if either the order number or the combined name matches the search term
             return data.number.toString().includes(value) || regex.test(fullName);

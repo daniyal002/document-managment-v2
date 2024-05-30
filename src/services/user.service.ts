@@ -1,5 +1,5 @@
 import { axiosWidthAuth } from "@/api/interseptors"
-import { IUser, IUserRequest, IUserAddResponse, IUserResponse } from "@/interface/user"
+import { IUserRequest, IUserAddResponse, IUserResponse } from "@/interface/user"
 
 export const userService = {
     async getUser (){

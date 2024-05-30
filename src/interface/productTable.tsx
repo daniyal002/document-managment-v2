@@ -1,8 +1,8 @@
-import { IProduct } from "./product";
+import { IProductUnit } from "./product";
 
 export interface IProductTable{
     id:number | undefined,
-    product:IProduct,
-    unitProductTable:string,
+    product:IProductUnit,
+    unitProductTable:number,
     count:number
 }

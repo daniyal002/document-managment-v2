@@ -6,9 +6,12 @@ import Order  from "../Order/OrderTab/Order";
 import useMessage from "antd/es/message/useMessage";
 import style from './Tab.module.scss'
 import { ModalSelectOrders } from "./ModalSelectOrders/ModalSelectOrders";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SummaryOrder from "../Order/SummaryOrder/SummaryOrder";
 import { IOrderItem } from "@/interface/orderItem";
+import { useProductStore } from "@/store/ProductStore/ProductStore";
+import { useProductData } from "@/hook/Product/productHook";
+import { IProductUnit } from "@/interface/product";
 
 export function Tab(){
 
@@ -21,6 +24,16 @@ export function Tab(){
     const activeKey =  useTabStore((state) => state.activeKey);
 
 
+    ///Продукт
+    const setProducts = useProductStore(state => state.setProducts)
+    const {productData} = useProductData()
+    useEffect(() => {
+      if (productData) {
+        setProducts(productData as IProductUnit[]);
+        console.log(productData)
+      }
+    }, [productData, setProducts]);
+    ///Продукт
 
 
     const onChange = (key: string) => {

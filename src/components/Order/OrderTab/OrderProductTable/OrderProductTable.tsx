@@ -1,6 +1,6 @@
 import style from "./OrderProductTable.module.scss"
 import { useProductTableStore } from "@/store/ProductTableStore/ProductTableStore"
-import { IProduct } from "@/interface/product"
+import { IProduct, IProductUnit } from "@/interface/product"
 import { Button, Input, InputProps, Space, Table, Typography } from "antd"
 import { OrderProduct } from "../OrderProduct/OrderProduct"
 import { useEffect, useState } from "react"
@@ -10,6 +10,7 @@ import type { NotificationArgsProps, TableColumnsType } from 'antd';
 import useNotification from "antd/es/notification/useNotification"
 import { useTabStore } from "@/store/TabStore/TabStore"
 import { IOrderItem } from "@/interface/orderItem"
+import { IBasicUnit } from "@/interface/basicUnit"
 
 
 type NotificationPlacement = NotificationArgsProps['placement'];
@@ -24,7 +25,6 @@ export function OrderProductTable({setOrderProductTable,keyTab,getOrderById}:Pro
 
     
     const [api, contextHolder] = useNotification();
-    const productsTable = useProductTableStore(state => state.productsInTable)
     const thisTab = useTabStore(state => state.getTabByKey(keyTab))
 
     const deleteProductInTable = useTabStore(state => state.deleteProductFromTable)
@@ -32,11 +32,11 @@ export function OrderProductTable({setOrderProductTable,keyTab,getOrderById}:Pro
     const pasteProductToTable = useTabStore(state => state.pasteProductToTable)
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [openSelection, setOpenSelection] = useState(false);
-    const [productInTable, setProductInTable] = useState<IProductTable>({id:1,product:{id:1, name:"1", basicUnit:{id:1, fullName:'in',name:"ss"}}, count:0,unitProductTable:"шт"})
+    const [isModalOpenProduct, setIsModalOpenProduct] = useState(false);
+    const [productInTable, setProductInTable] = useState<IProductTable>()
 
     useEffect(()=>{
-        pasteProductToTable(keyTab, getOrderById?.productOrder)
+        pasteProductToTable(keyTab, getOrderById?.productOrder as IProductTable[])
     },[getOrderById?.productOrder])
 
     useEffect(()=>{
@@ -47,9 +47,9 @@ export function OrderProductTable({setOrderProductTable,keyTab,getOrderById}:Pro
       setIsModalOpen(true);
     };
 
-    const handleOk = (unitProductTable:number, count:number) => {
+    const handleOk = (unitProductTable:IBasicUnit, count:number) => {
       setIsModalOpen(false);
-      updateProductInTable(keyTab,Number(productInTable.id),unitProductTable,count)
+      updateProductInTable(keyTab,Number(productInTable?.id as number),unitProductTable,count)
     };
 
     const handleCancel = () => {
@@ -74,6 +74,7 @@ export function OrderProductTable({setOrderProductTable,keyTab,getOrderById}:Pro
           sorter: {
             compare: (a:any, b:any) => a.unitProductTable.localeCompare(b.unitProductTable, 'ru'),
           },
+          render: (unit:IBasicUnit) => unit?.name,
           responsive:['sm']
         },
         {
@@ -92,9 +93,9 @@ export function OrderProductTable({setOrderProductTable,keyTab,getOrderById}:Pro
             render: (record:IProductTable) => (
               <Space size="middle">
                 <div className={style.orderProductTableAction}>
-                <Button onClick={()=>{setProductInTable(record);showModal()}}>Изменить</Button>
-                <Button onClick={()=>deleteProductInTable(keyTab,record.id)}>Удалить</Button>
-                <Button onClick={() => openNotification('top', record.product.product_name, record.unitProductTable, record.count)}id={style.orderProductTableActionButton}>Подробнее</Button>
+                <Button onClick={()=>{setProductInTable(record);showModal(); console.log(record)}}>Изменить</Button>
+                <Button onClick={()=>deleteProductInTable(keyTab,record.id as number)}>Удалить</Button>
+                <Button onClick={() => openNotification('top', record.product.product_name, record.unitProductTable.name, record.count)}id={style.orderProductTableActionButton}>Подробнее</Button>
                 </div>
             </Space>
             ),
@@ -120,23 +121,33 @@ export function OrderProductTable({setOrderProductTable,keyTab,getOrderById}:Pro
     });
   };
 
+
+  const showModalProduct = () => {
+    setIsModalOpenProduct(true);
+  };
+
+  const handleOkOProduct = () => {
+    setIsModalOpenProduct(false);
+  };
+
+  const handleCancelProduct = () => {
+    setIsModalOpenProduct(false);
+  };
     return(
         
         <div className={style.orderProductTable}>
             {contextHolder}
-            <OrderModal handleCancel={handleCancel} handleOk={handleOk} isModalOpen={isModalOpen} product={productInTable.product} type="Изменение" defaultValuesCount={productInTable.count} defaultValuesUnit={productInTable.unitProductTable}/>
-            <Button onClick={() => setOpenSelection(!openSelection)}>Подбор</Button>
+            <OrderModal handleCancel={handleCancel} handleOk={handleOk} isModalOpen={isModalOpen} product={productInTable?.product as IProductUnit} type="Изменение" defaultValuesCount={productInTable?.count} defaultValuesUnit={productInTable?.unitProductTable.id as number}/>
+            <Button onClick={() => showModalProduct()}>Подбор</Button>
             <div className={style.orderProductTableSelection}>
-                <Table dataSource={thisTab?.productsInTable} columns={columns} className={openSelection ? style.table :style.tableMaxWidth} pagination={{ pageSize: Number(pageSize)}}   scroll={{ y: 700 }}
+                <Table dataSource={thisTab?.productsInTable} columns={columns} className={style.tableMaxWidth} pagination={{ pageSize: Number(pageSize)}}   scroll={{ y: 700 }}
                 footer={(_) => (
                   <>
                     <Typography.Title id={style.orderProductTableFooterLabel}>Количество товара в таблице</Typography.Title>
                     <Input onChange={onChangeInput} placeholder="10"  id={style.orderProductTableFooterInput}/>
                   </>)}
                 />
-                {openSelection && (
-                <OrderProduct keyTab={keyTab}/>
-                 )}
+                <OrderProduct keyTab={keyTab} isModalOpen={isModalOpenProduct}  handleOk={handleOkOProduct} handleCancel={handleCancelProduct}/>
             </div>
         </div>
     )

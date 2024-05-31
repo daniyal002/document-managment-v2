@@ -8,7 +8,7 @@ export interface IProduct{
     unit_measurement:IBasicUnit
 }
 
-interface IProductGroup{
+export interface IProductGroup{
     id:1,
     name:string
 }

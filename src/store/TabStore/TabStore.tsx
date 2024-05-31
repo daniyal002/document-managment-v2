@@ -1,5 +1,6 @@
 
 import { OrderList } from "@/components/Order/OrderList/OrderList"
+import { IBasicUnit } from "@/interface/basicUnit"
 import { IOrderItem } from "@/interface/orderItem"
 import { IProductTable } from "@/interface/productTable"
 import { table } from "console"
@@ -23,7 +24,7 @@ interface ITabStore  {
     editIsNewTab: (edit:boolean) => void,
     addProductToTable: (tableKey: string, product: IProductTable) => void
     pasteProductToTable: (tableKey: string, product: IProductTable[]) => void
-    updateProductInTable: (tableKey: string, productKey: number, unitProductTable: number,count:number ) => void
+    updateProductInTable: (tableKey: string, productKey: number, unitProductTable: IBasicUnit,count:number ) => void
     deleteProductFromTable: (tableKey: string, productKey: number) => void
     getTabByKey: (key: string) => ITabPane | undefined
     setActiveKey: (key: string) => void
@@ -42,7 +43,7 @@ interface ITabStore  {
       tableKey: string,
       orderId: number,
       productKey: number,
-      unitProductTable: number,
+      unitProductTable: IBasicUnit,
       count: number
     ) => void;
     deleteProductFromOrder: (

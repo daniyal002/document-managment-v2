@@ -9,6 +9,7 @@ import { IProduct } from "@/interface/product";
 import { compareByFullName } from "@/helper/EmployeeSorter";
 import { IEmployee } from "@/interface/employee";
 import { IParlor } from "@/interface/parlor";
+import { IBasicUnit } from "@/interface/basicUnit";
 
 interface Props{
     keyTab:string,
@@ -93,7 +94,7 @@ export function SummaryOrderTable({keyTab}:Props){
         setIsModalOpen(true);
       };
   
-      const handleOk = (unitProductTable:number, count:number) => {
+      const handleOk = (unitProductTable:IBasicUnit, count:number) => {
         setIsModalOpen(false);
         updateProductInOrder(keyTab,Number(orderId),Number(productInOrderId),unitProductTable,count)
       };

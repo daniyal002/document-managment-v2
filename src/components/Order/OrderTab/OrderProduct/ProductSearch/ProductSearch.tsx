@@ -17,7 +17,7 @@ const setSearchProducts = useProductStore((state) => state.setSearchProducts);
           // Создаем регулярное выражение из поискового запроса
           const regex = new RegExp(value.split('').join('.*'), 'i'); 
           setSearchProducts(products.filter(data => {
-            return data.name.match(regex);
+            return data.product_name.match(regex);
           }));
         } else {
             setSearchProducts(products);

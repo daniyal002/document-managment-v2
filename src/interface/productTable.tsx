@@ -1,8 +1,9 @@
+import { IBasicUnit } from "./basicUnit";
 import { IProductUnit } from "./product";
 
 export interface IProductTable{
     id:number | undefined,
     product:IProductUnit,
-    unitProductTable:number,
+    unitProductTable:IBasicUnit,
     count:number
 }

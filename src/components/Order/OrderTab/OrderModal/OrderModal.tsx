@@ -1,6 +1,5 @@
 import { Selector } from "@/components/UI/Select/Selector";
-import { IProduct, IProductUnit } from "@/interface/product";
-import { useUnitStore } from "@/store/UnitStore/UnitStore";
+import { IProductUnit } from "@/interface/product";
 import {Button, Input, InputProps, Modal, SelectProps, Typography } from "antd";
 import { useEffect, useState } from "react";
 
@@ -17,14 +16,21 @@ interface Props{
 
 export function OrderModal({isModalOpen, handleOk, handleCancel, product, type,defaultValuesCount,defaultValuesUnit}:Props){
 
+  const multiplayUnitmeasurement = product?.unit_measurement?.name
 
   const options = product?.directory_unit_measurement?.map(item=>({
       value: item?.unit_measurement?.id,
-      label: item?.unit_measurement?.name
+      label: `${item?.unit_measurement?.name}(${item.coefficient} ${multiplayUnitmeasurement})`
   })) 
 
   const [selectUnit, setSelectUnit] = useState<number>();
   const [enterCount, setEnterCount] = useState<number>(1);
+  const [multiplayCoefficient,setMultiplayCoefficient] = useState<number>()
+
+  useEffect(()=>{
+    const unit = product?.directory_unit_measurement?.find(item => item.unit_measurement.id === selectUnit)
+    setMultiplayCoefficient(Number(unit?.coefficient) * enterCount)
+  },[selectUnit,enterCount])
 
 
   useEffect(() => {
@@ -49,7 +55,8 @@ export function OrderModal({isModalOpen, handleOk, handleCancel, product, type,d
   }
   
   const onOk = () => {
-    handleOk(selectUnit, enterCount)
+    const unit = product.directory_unit_measurement.find(item => item.unit_measurement.id === selectUnit)
+    handleOk(unit?.unit_measurement, enterCount)
     setSelectUnit(undefined);
     setEnterCount(1);
   };
@@ -71,6 +78,9 @@ export function OrderModal({isModalOpen, handleOk, handleCancel, product, type,d
         <div>
             <Typography.Title level={5}>Единица измерения</Typography.Title>
             <Selector onChange={onChangeSelect} optionArray={options} placeholder="Выберите единицу измерения" value={selectUnit ? selectUnit : null}/>
+        </div>
+        <div>
+          <Typography>Количество в основной единице измерения: {`${multiplayCoefficient ? multiplayCoefficient : 1 } ${multiplayUnitmeasurement}`} </Typography>
         </div>
       </Modal>
     </>

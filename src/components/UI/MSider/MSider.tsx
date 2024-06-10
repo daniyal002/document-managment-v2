@@ -9,6 +9,8 @@ import { useAuthStore } from '@/store/AuthStore/AuthStore';
 import useMessage from 'antd/es/message/useMessage';
 import Sider from 'antd/es/layout/Sider';
 import style from './MSider.module.scss'
+import { usePathname } from 'next/navigation'
+
 
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -52,6 +54,11 @@ const {push} = useRouter()
       push(e.key)
       setCurrent(e.key);
   };
+  const pathname = usePathname();
+
+  if(pathname === '/login'){
+    return null
+  }
   return(
     <>
       {contextHolder}

@@ -6,7 +6,7 @@ export interface ILoginRequest{
 export interface ILoginResponse{
     access_token:string,
     refresh_token:string,
-    detail:string,
+    detail?:string,
 }
 
 export interface IRegisterRequest{
@@ -16,4 +16,8 @@ export interface IRegisterRequest{
 
 export interface IRegisterResponse{
     message:string;
+}
+
+export interface IRefreshRequest{
+    refresh_token:string
 }

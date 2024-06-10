@@ -3,13 +3,17 @@
 import { HomeFilled, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
 import style from './Header.module.scss'
 import { useAuthStore } from '@/store/AuthStore/AuthStore';
+import { usePathname } from 'next/navigation'
 
 export function Header(){
 
   const collapsed = useAuthStore(state => state.collapsed)
   const editCollapsed = useAuthStore(state => state.editCollapsed)
+  const pathname = usePathname();
 
-
+  if(pathname === '/login'){
+    return null
+  }
     return(<>
     <header className={style.header}>
         <div className={style.headerLogo}>

@@ -1,6 +1,6 @@
 import { IHousing } from "@/interface/housing";
 import { useHousingStore } from "@/store/HousingStore/HousingStore";
-import { Button, Popconfirm, PopconfirmProps, Space, Table, TableColumnsType, message } from "antd";
+import { Button, ConfigProvider, Popconfirm, PopconfirmProps, Space, Table, TableColumnsType, message } from "antd";
 import { useState } from "react";
 import { HousingModal } from "../HousingModal/HousingModal";
 import { useDeleteHousingMutation, useUpdateHousingMutation } from "@/hook/Housing/housingHook";
@@ -14,8 +14,6 @@ interface Props{
 
 export function AdminHousingTable({housings,isLoading}:Props){
 
-    const updateHousingById = useHousingStore(state => state.updateHousingById)
-    const deleteHousingById = useHousingStore(state => state.deleteHousingById)
     const {mutate:updateHousingMutation} = useUpdateHousingMutation()
     const {mutate:deleteHousingMutation} = useDeleteHousingMutation()
     const getHousingById = useHousingStore(state => state.getHousingById)
@@ -84,8 +82,22 @@ export function AdminHousingTable({housings,isLoading}:Props){
     ]
     return(
         <>  
+        <ConfigProvider 
+        theme={{
+          components:{
+            Table:{
+              headerColor:"rgba(255,255,255,1)",
+              headerBg:"rgba(80, 111, 217,0.7)",
+              headerSortHoverBg:'rgba(80, 111, 217,0.5)',
+              bodySortBg:"rgba(220, 226, 247,1)",
+              headerSortActiveBg:"rgba(80, 111, 217,0.5)",
+              rowHoverBg:"rgba(80, 111, 217,0.1)",
+            }
+          }
+        }}> 
             <HousingModal handleOk={handleOk} handleCancel={handleCancel} isModalOpen={isModalOpen} type='Изменение' defaultValuesHousing={defaultValuesHousing}/>
             <Table columns={columns} dataSource={housings} pagination={{ pageSize: 10}}   scroll={{ y: "80vh" }} loading={isLoading}/>
+        </ConfigProvider>
         </>
     )
 } 

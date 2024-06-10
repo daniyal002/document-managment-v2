@@ -1,7 +1,7 @@
 import style from "./OrderProductTable.module.scss"
 import { useProductTableStore } from "@/store/ProductTableStore/ProductTableStore"
 import { IProduct, IProductUnit } from "@/interface/product"
-import { Button, Input, InputProps, Space, Table, Typography } from "antd"
+import { Button, ConfigProvider, Input, InputProps, Space, Table, Typography } from "antd"
 import { OrderProduct } from "../OrderProduct/OrderProduct"
 import { useEffect, useState } from "react"
 import { IProductTable } from "@/interface/productTable"
@@ -134,7 +134,20 @@ export function OrderProductTable({setOrderProductTable,keyTab,getOrderById}:Pro
     setIsModalOpenProduct(false);
   };
     return(
-        
+      <ConfigProvider 
+      theme={{
+        components:{
+          Table:{
+            headerColor:"rgba(255,255,255,1)",
+            headerBg:"rgba(80, 111, 217,0.7)",
+            headerSortHoverBg:'rgba(80, 111, 217,0.5)',
+            bodySortBg:"rgba(220, 226, 247,1)",
+            headerSortActiveBg:"rgba(80, 111, 217,0.5)",
+            rowHoverBg:"rgba(80, 111, 217,0.1)",
+            footerBg:"rgba(80, 111, 217,0.7)"
+          }
+        }
+      }}> 
         <div className={style.orderProductTable}>
             {contextHolder}
             <OrderModal handleCancel={handleCancel} handleOk={handleOk} isModalOpen={isModalOpen} product={productInTable?.product as IProductUnit} type="Изменение" defaultValuesCount={productInTable?.count} defaultValuesUnit={productInTable?.unitProductTable.id as number}/>
@@ -143,12 +156,13 @@ export function OrderProductTable({setOrderProductTable,keyTab,getOrderById}:Pro
                 <Table dataSource={thisTab?.productsInTable} columns={columns} className={style.tableMaxWidth} pagination={{ pageSize: Number(pageSize)}}   scroll={{ y: 700 }}
                 footer={(_) => (
                   <>
-                    <Typography.Title id={style.orderProductTableFooterLabel}>Количество товара в таблице</Typography.Title>
+                    <Typography.Title id={style.orderProductTableFooterLabel}>Количество товара в странице таблицы</Typography.Title>
                     <Input onChange={onChangeInput} placeholder="10"  id={style.orderProductTableFooterInput}/>
                   </>)}
                 />
                 <OrderProduct keyTab={keyTab} isModalOpen={isModalOpenProduct}  handleOk={handleOkOProduct} handleCancel={handleCancelProduct}/>
             </div>
         </div>
+        </ConfigProvider>
     )
 }

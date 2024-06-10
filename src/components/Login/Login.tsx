@@ -1,6 +1,6 @@
 'use client'
 
-import { Alert, Button, Form, FormProps, Input } from "antd";
+import { Alert, Button, Form, FormProps, Input, message, Typography } from "antd";
 import style from './Login.module.scss'
 import { ILoginRequest } from "@/interface/auth";
 import { useRouter } from "next/navigation";
@@ -16,20 +16,22 @@ export default function Login(){
   };
       
   const onFinishFailed: FormProps<ILoginRequest>['onFinishFailed'] = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+    // console.log('Failed:', errorInfo);
   };
 
     return(
         <>
         <Form
         name="basic"
-        style={{ maxWidth: 310, width: "100%" }}
+        style={{padding:'20px'}}
+        className={`${style.formLogin} ${error ? style.error : ''}`}
         initialValues={{ remember: true }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
-        <div className={`${style.formLogin} ${error ? style.error : ''}`}>
+          <Typography.Title className={style.loginLogo}>Доктор Снабжение</Typography.Title>
+          <Typography.Title level={4} className={style.loginText}>Войдите в свою учетную запись</Typography.Title>
 
         <Form.Item<ILoginRequest>
           name="login"
@@ -50,16 +52,17 @@ export default function Login(){
             <Input.Password id={style.passwordInput} placeholder="Введите пароль"/>
             </div>
         </Form.Item>
-    
+
+        <div className={style.loginForgotPassword}>
+          <a id={style.loginForgotPasswordText} onClick={() => message.info("Обратитесь в поддержку для смены пароля")}>
+            Забыли пароль ? 
+          </a>
+        </div>
+
         <Form.Item>
           <Button type="primary" htmlType="submit" id={style.loginSubmit}>
             Войти
           </Button>
-          {/* <Button type="primary" 
-          onClick={() => authService.logout()} 
-          id={style.loginSubmit}>
-            Выйти
-          </Button> */}
          
         </Form.Item>
         {error && (
@@ -71,8 +74,6 @@ export default function Login(){
               id={style.alertError}
               />
           )}
-        </div>
-
       </Form>
       </>
     )

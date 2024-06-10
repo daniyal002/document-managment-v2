@@ -1,5 +1,41 @@
 .formLogin{
     transition: margin-top 0.2s ease;
+    max-width: 540px;
+    width: 100%;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+
+    .loginLogo{
+        text-transform: uppercase;
+        color:#678098;
+        font-weight: 600;
+        font-size: 16px;
+        text-align: center;
+    }
+    .loginText{
+        font-weight: 600;
+        font-size: 18px;
+        text-align: center;
+    }
+    .formItem{
+        display: flex;
+        flex-direction: column;
+        row-gap: 5px;
+    
+        label{
+            font-size: 14px;
+        }
+    }
+    .loginForgotPassword{
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom:24px;
+    }
+    .loginForgotPasswordText{
+        color: #1677ff;
+        text-align: left;
+    }
 }
 .error {
     margin-top: -50px; /* Изменяем margin-top при ошибке (можете выбрать подходящее значение) */
@@ -11,15 +47,7 @@
     font-size: 25px;
 }
 
-.formItem{
-    display: flex;
-    flex-direction: column;
-    row-gap: 5px;
 
-    label{
-        font-size: 18px;
-    }
-}
 
 #loginSubmit{
     width: 100%;
@@ -29,6 +57,7 @@
     padding: 20px;
     font-size: 20px;
     height: 50px;
+    background-color: #678098;
     }
 
 #alertError{

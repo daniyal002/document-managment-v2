@@ -1,4 +1,4 @@
-import { Button, Popconfirm, PopconfirmProps, Space, Table, TableColumnsType, message } from "antd";
+import { Button, ConfigProvider, Popconfirm, PopconfirmProps, Space, Table, TableColumnsType, message } from "antd";
 import { useState } from "react";
 import { useRoleStore } from "@/store/RoleStore/RoleStore";
 import { IRole } from "@/interface/role";
@@ -81,8 +81,22 @@ export function AdminRoleTable({roles,isLoading}:Props){
     ]
     return(
         <>  
+        <ConfigProvider 
+        theme={{
+          components:{
+            Table:{
+              headerColor:"rgba(255,255,255,1)",
+              headerBg:"rgba(80, 111, 217,0.7)",
+              headerSortHoverBg:'rgba(80, 111, 217,0.5)',
+              bodySortBg:"rgba(220, 226, 247,1)",
+              headerSortActiveBg:"rgba(80, 111, 217,0.5)",
+              rowHoverBg:"rgba(80, 111, 217,0.1)",
+            }
+          }
+        }}> 
             <AdminRoleModal handleOk={handleOk} handleCancel={handleCancel} isModalOpen={isModalOpen} type='Изменение' defaultValuesRole={defaultValuesRole}/>
             <Table columns={columns} dataSource={roles} pagination={{ pageSize: 10}}   scroll={{ y: "80vh" }} loading={isLoading} />
+        </ConfigProvider>
         </>
     )
 } 

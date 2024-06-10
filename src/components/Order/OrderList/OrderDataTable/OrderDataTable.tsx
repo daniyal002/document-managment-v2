@@ -2,7 +2,7 @@ import { IEmployee } from "@/interface/employee";
 import { IOrderItem } from "@/interface/orderItem";
 import { useOrderStore } from "@/store/OrderStore/orderStore";
 import { useTabStore } from "@/store/TabStore/TabStore";
-import { Table, Space,Button, TableColumnsType } from "antd";
+import { Table, Space,Button, TableColumnsType, ConfigProvider, Tooltip } from "antd";
 import { useEffect } from "react";
 import Order from "../../OrderTab/Order";
 import { compareByFullName } from "@/helper/EmployeeSorter";
@@ -43,6 +43,7 @@ const columns: TableColumnsType<IOrderItem> = [
             compare: (a:any, b:any) => a.number - b.number,
             multiple: 4,
           },
+          showSorterTooltip: {title:"Сортировка по номеру заявки"},
         },
         
         {
@@ -57,6 +58,7 @@ const columns: TableColumnsType<IOrderItem> = [
             // Compare Date objects using getTime() to get milliseconds since epoch
             return dateA.getTime() - dateB.getTime();
           },
+          showSorterTooltip: {title:"Сортировка по дате"},
         },
         {
           title: 'Статус',
@@ -70,6 +72,7 @@ const columns: TableColumnsType<IOrderItem> = [
           filterMode: 'menu',
           filterSearch: true,
           onFilter: (value:string, record:IOrderItem) => record.status.includes(value),
+          showSorterTooltip: {title:"Сортировка по статусу"},
         },
         {
           title: 'Инициатор',
@@ -77,7 +80,8 @@ const columns: TableColumnsType<IOrderItem> = [
           key: 'initiator',
           sorter: (a:IOrderItem, b:IOrderItem) => compareByFullName(a.initiator as IEmployee, b.initiator as IEmployee),
           ellipsis: true,
-          render: (initiator:IEmployee) => `${initiator?.last_name} ${initiator?.first_name} ${initiator?.middle_name}` 
+          render: (initiator:IEmployee) => `${initiator?.last_name} ${initiator?.first_name} ${initiator?.middle_name}`,
+          showSorterTooltip: {title:"Сортировка по инициатору"},
         },
         {
           title: 'Действия',
@@ -91,6 +95,20 @@ const columns: TableColumnsType<IOrderItem> = [
     ];
 
 return(
+  <ConfigProvider 
+      theme={{
+        components:{
+          Table:{
+            headerColor:"rgba(255,255,255,1)",
+            headerBg:"rgba(80, 111, 217,0.7)",
+            headerSortHoverBg:'rgba(80, 111, 217,0.5)',
+            bodySortBg:"rgba(220, 226, 247,1)",
+            headerSortActiveBg:"rgba(80, 111, 217,0.5)",
+            rowHoverBg:"rgba(80, 111, 217,0.1)",
+          }
+        }
+      }}> 
     <Table dataSource={searchOrders} columns={columns} />
+    </ConfigProvider>
 )
 }

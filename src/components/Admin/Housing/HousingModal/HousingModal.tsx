@@ -1,5 +1,4 @@
 import { Button, Input, Modal, InputProps, Typography } from 'antd'
-import style from './HousingModal.module.scss'
 import { useEffect, useState } from 'react';
 
 

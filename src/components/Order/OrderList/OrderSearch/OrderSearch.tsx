@@ -1,5 +1,6 @@
 import { useOrderStore } from "@/store/OrderStore/orderStore";
-import { Input } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+import { Button, ConfigProvider, Input } from "antd";
 import type { SearchProps } from 'antd/es/input/Search';
 
 
@@ -29,7 +30,17 @@ const setSearchOrders = useOrderStore((state) => state.setSearchOrders);
       };
 
       return(
+        <ConfigProvider 
+      theme={{
+        components:{
+          Input:{
+            colorIcon:"rgba(151, 141, 237,0.9)",
+            colorIconHover:"rgba(151, 141, 237,0.9)",
+          },
+          
+        }
+      }}> 
       <Search placeholder="Введите номер заявки или инициатора" onSearch={onSearch} enterButton />
-
+      </ConfigProvider>
       )
 }

@@ -9,7 +9,7 @@ interface IAuthStore{
 
 export const useAuthStore = create<IAuthStore>((set,get)=>({
     successLoginMessage:"",
-    collapsed:false,
+    collapsed:true,
     setSuccessLoginMessage: (message:string) =>{
         set({successLoginMessage:message})
     },

@@ -5,7 +5,6 @@ import { useState } from 'react'
 import { useEmployeeStore } from '@/store/EmployeeStore/EmployeeStore'
 import { IParlor } from '@/interface/parlor'
 import { IPost } from '@/interface/post'
-import { IEmployeeFullName } from '@/interface/employee'
 import { AdminEmployeeModal } from './AdminEmployeeModal/AdminEmployeeModal'
 import { AdminEmployeeTable } from './AdminEmployeeTable/AdminEmployeeTable'
 import { useCreateEmployeeMutation } from '@/hook/Employee/employeeHook'
@@ -24,9 +23,9 @@ export function AdminEmployee(){
         setIsModalOpen(true);
     };
 
-    const handleOk = (fullName:IEmployeeFullName,parlor:IParlor[],post:IPost) => {
+    const handleOk = (buyer_name:string,buyer_type:string,parlor:IParlor[],post:IPost) => {
         setIsModalOpen(false);
-        createEmployeeMutation({first_name:fullName.firstName,last_name:fullName.lastName,middle_name:fullName.middleName,parlor,post})
+        createEmployeeMutation({buyer_name,buyer_type,parlor,post})
     };
 
     const handleCancel = () => {

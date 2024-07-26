@@ -1,4 +1,4 @@
-import { IEmployee } from "./employee";
+import { IEmployee, IEmployeeGetMe } from "./employee";
 import { IRole } from "./role";
 
 export interface IUser{
@@ -24,4 +24,12 @@ export interface IUserRequest{
 export interface IUserAddResponse{
     detail:string,
     user: IUser
+}
+
+export interface IGetMe{
+    id?:number,
+    login:string,
+    password:string,
+    role:IRole | undefined,
+    employee:IEmployeeGetMe,
 }

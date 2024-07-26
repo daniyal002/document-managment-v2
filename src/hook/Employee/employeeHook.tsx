@@ -20,7 +20,7 @@ export const useCreateEmployeeMutation = () => {
             data.parlor?.forEach(item=>{
                 parlorIds.push(item.id as number)
             })
-          return employeeService.addEmployee({employee:{first_name:data.first_name,last_name:data.last_name,middle_name:data.middle_name,post_id:data.post.id as number},parlor_ids:parlorIds})
+          return employeeService.addEmployee({employee:{buyer_name:data.buyer_name,buyer_type:data.buyer_type,post_id:data.post.id as number},parlor_ids:parlorIds})
         },
         onSuccess(data){
           createEmployee(data.employee)
@@ -43,7 +43,7 @@ export const useUpdateEmployeeMutation = () => {
             data.parlor?.forEach(item=>{
                 parlorIds.push(item.id as number)
             })
-          return employeeService.updateEmployee({employee:{id:data.id,first_name:data.first_name,last_name:data.last_name,middle_name:data.middle_name,post_id:data.post.id as number},parlor_ids:parlorIds})
+          return employeeService.updateEmployee({employee:{id:data.id,buyer_name:data.buyer_name,buyer_type:data.buyer_type,post_id:data.post.id as number},parlor_ids:parlorIds})
         },
         onSuccess(data, variables){
           updateEmployeeById(variables.id as number,variables)

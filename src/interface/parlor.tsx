@@ -1,4 +1,5 @@
 import { IDepartment } from "./department";
+import { IEmployeeFromParlorGetMe } from "./employee";
 import { IFloor } from "./floor";
 
 export interface IParlor{
@@ -22,4 +23,12 @@ export interface IParlorRequest{
 export interface IParlorAddResponse{
     detail:string,
     parlor: IParlor
+}
+
+export interface IParlorGetMe{
+    id?:number,
+    parlor_name:string,
+    department:IDepartment | undefined
+    floor?: IFloor | undefined
+    employees:IEmployeeFromParlorGetMe[]
 }

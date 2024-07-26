@@ -2,12 +2,11 @@
 
 import { useTabStore } from "@/store/TabStore/TabStore";
 import { Button, Tabs } from "antd";
-import Order  from "../Order/OrderTab/Order";
+import Order  from "../OrderOld/OrderTab/Order";
 import useMessage from "antd/es/message/useMessage";
 import style from './Tab.module.scss'
 import { ModalSelectOrders } from "./ModalSelectOrders/ModalSelectOrders";
 import { useEffect, useState } from "react";
-import SummaryOrder from "../Order/SummaryOrder/SummaryOrder";
 import { IOrderItem } from "@/interface/orderItem";
 import { useProductStore } from "@/store/ProductStore/ProductStore";
 import { useProductData } from "@/hook/Product/productHook";
@@ -30,7 +29,6 @@ export function Tab(){
     useEffect(() => {
       if (productData) {
         setProducts(productData as IProductUnit[]);
-        console.log(productData)
       }
     }, [productData, setProducts]);
     ///Продукт
@@ -46,8 +44,6 @@ export function Tab(){
           setActiveKey(newKey)
           if(typeTab === "newTab"){
             createNewTab("Новая заявка", <> Новая заявка {newKey} <Order keyTab={newKey} type="Создание"/> </>, newKey );
-          }else if(typeTab === "summaryNewTab"){
-            createNewTab("Новая сводная заявка", <> Новая сводная заявка {newKey} <SummaryOrder keyTab={newKey} type="Создание"/> </>, newKey,order);
           }
           editIsNewTab(true);
         }else if(isNewTab==true){
@@ -84,7 +80,6 @@ export function Tab(){
         {contextHolder}
         <ModalSelectOrders isModalOpen={isModalOpen} handleOk={handleOk} handleCancel={handleCancel}/>
         <Button  onClick={() => newTabPane("newTab")} id={style.tabButton}>Создать</Button>
-        <Button  onClick={showModal} id={style.tabButton}>Создать сводную заявку</Button>
         <Tabs items={tabs} activeKey={activeKey} onChange={onChange}/>
       </>
     )

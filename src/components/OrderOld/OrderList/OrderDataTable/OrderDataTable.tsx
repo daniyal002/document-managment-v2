@@ -2,7 +2,7 @@ import { IEmployee } from "@/interface/employee";
 import { IOrderItem } from "@/interface/orderItem";
 import { useOrderStore } from "@/store/OrderStore/orderStore";
 import { useTabStore } from "@/store/TabStore/TabStore";
-import { Table, Space,Button, TableColumnsType, ConfigProvider, Tooltip } from "antd";
+import { Table, Space,Button, TableColumnsType, ConfigProvider } from "antd";
 import { useEffect } from "react";
 import Order from "../../OrderTab/Order";
 import { compareByFullName } from "@/helper/EmployeeSorter";
@@ -85,6 +85,7 @@ const columns: TableColumnsType<IOrderItem> = [
         },
         {
           title: 'Действия',
+          dataIndex: 'action',
           key: 'action',
           render:(_:any, record:IOrderItem) => (
             <Space size="middle">

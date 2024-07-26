@@ -1,15 +1,16 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
-import {OrderedListOutlined, UserSwitchOutlined, MenuFoldOutlined, MenuUnfoldOutlined, } from '@ant-design/icons';
+import {OrderedListOutlined, UserSwitchOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Button, ConfigProvider, Menu, theme } from 'antd';
+import { ConfigProvider, Menu } from 'antd';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/AuthStore/AuthStore';
 import useMessage from 'antd/es/message/useMessage';
 import Sider from 'antd/es/layout/Sider';
 import style from './MSider.module.scss'
 import { usePathname } from 'next/navigation'
+import { isRole, protectedRoutes } from '@/helper/ProtectedRoutes';
 
 
 
@@ -18,18 +19,31 @@ type MenuItem = Required<MenuProps>['items'][number];
 const items: MenuItem[] = [
   {
     label: 'Заявки',
-    key: '/',
+    key: '/order',
     icon: <OrderedListOutlined />,
   },
  
   {
     label: 'Админка',
-    key: 'admin',
+    key: '/admin',
     icon: <UserSwitchOutlined />,
   },
 ];
 
+ const getFilteredItems = (role: string | null): MenuItem[] => {
+  return items.filter(menuItem => {
+    const protectedRoute = protectedRoutes.find(route => route?.path === menuItem?.key);
+
+    if (protectedRoute) {
+      return protectedRoute.role.includes(role as string);
+    }
+
+    return true;
+  });
+}
+
 export function MSider() {
+  const [filteredItems, setFilteredItems] = useState<MenuItem[]>([]);
   const successLoginMessage = useAuthStore(state => state.successLoginMessage)
   const [messageApi, contextHolder] = useMessage();
   const success = () => {
@@ -38,6 +52,11 @@ export function MSider() {
       content: successLoginMessage,
     });
   };
+
+  useEffect(() => {
+    const role = isRole();
+    setFilteredItems(getFilteredItems(role));
+  }, []);   
 
   useEffect(()=>
     {
@@ -80,7 +99,7 @@ const {push} = useRouter()
           theme="light"
           mode="inline"
           defaultSelectedKeys={['1']}
-          items={items}
+          items={filteredItems}
           onClick={onClick}
           selectedKeys={[current]}
           className={style.headerMenu}

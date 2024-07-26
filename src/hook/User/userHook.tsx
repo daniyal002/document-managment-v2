@@ -11,6 +11,11 @@ export const useUserData = () => {
   return {userData, isLoading, error}
 }
 
+export const useGetMe = () => {
+  const { data: GetMeData, isLoading, error } = useQuery({queryKey:['getMe'],queryFn:userService.getMe});
+  return {GetMeData, isLoading, error}
+}
+
 export const useCreateUserMutation = () => {
     const createUser = useUserStore((state) => state.createUser);
     const { mutate,error } = useMutation({

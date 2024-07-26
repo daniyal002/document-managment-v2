@@ -1,7 +1,9 @@
 
-import { OrderList } from "@/components/Order/OrderList/OrderList"
+import { OrderList } from "@/components/OrderOld/OrderList/OrderList"
 import { IBasicUnit } from "@/interface/basicUnit"
+import { IDoctorParlor, IEmployee } from "@/interface/employee"
 import { IOrderItem } from "@/interface/orderItem"
+import { IParlor } from "@/interface/parlor"
 import { IProductTable } from "@/interface/productTable"
 import { table } from "console"
 import { create } from "zustand"
@@ -50,6 +52,20 @@ interface ITabStore  {
       tableKey: string,
       orderId: number,
       productKey: number
+    ) => void;
+
+    addDoctorToProduct: (
+      tableKey: string,
+      orderId: number,
+      productKey: number,
+      doctorParlor: IDoctorParlor[]
+    ) => void;
+    
+    deleteDoctorToProduct: (
+      tableKey: string,
+      orderId: number,
+      productKey: number,
+      doctorParlorId: number
     ) => void;
 }
 
@@ -241,5 +257,60 @@ export const useTabStore = create<ITabStore>((set, get) => ({
       ),
     }));
   },
+
+  /// Доктора в товаре
+
+  addDoctorToProduct: (tableKey, orderId, productKey, doctorParlor) => {
+    set((state) => ({
+      tabs: state.tabs.map((tab) =>
+        tab.key === tableKey
+          ? {
+              ...tab,
+              orders: tab.orders.map((order) =>
+                order.id === orderId
+                  ? {
+                      ...order,
+                      productOrder: order.productOrder.map((product) => 
+                        product.id === productKey
+                      ? {
+                        ...product,
+                        doctorParlor: [...product.doctorParlor as IDoctorParlor[], ...doctorParlor]
+
+                      } : product
+                      ),
+                    }
+                  : order
+              ),
+            }
+          : tab
+      ),
+    }));
+  },
+  
+  deleteDoctorToProduct: (tableKey, orderId, productKey,doctorParlorId) => {
+    set((state) => ({
+      tabs: state.tabs.map((tab) =>
+        tab.key === tableKey
+          ? {
+              ...tab,
+              orders: tab.orders.map((order) =>
+                order.id === orderId
+                  ? {
+                      ...order,
+                      productOrder: order.productOrder.map((product)=>
+                        product.id === productKey ? {
+                          ...product,
+                          doctorParlor: product.doctorParlor?.filter((dp)=>{dp.key !== doctorParlorId })
+                        } : product
+                      )
+                    }
+                  : order
+              ),
+            }
+          : tab
+      ),
+    }));
+  },
+
 
 }))

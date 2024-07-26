@@ -1,18 +1,26 @@
 'use client'
 
-import { HomeFilled, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
+import { HomeFilled, LogoutOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
 import style from './Header.module.scss'
 import { useAuthStore } from '@/store/AuthStore/AuthStore';
-import { usePathname } from 'next/navigation'
+import { usePathname,useRouter } from 'next/navigation'
+import { authService } from '@/services/auth.service';
 
 export function Header(){
 
   const collapsed = useAuthStore(state => state.collapsed)
   const editCollapsed = useAuthStore(state => state.editCollapsed)
   const pathname = usePathname();
+  const {push} = useRouter()
 
   if(pathname === '/login'){
     return null
+  }
+
+  const logout = () => {
+    authService.logout()
+    push('/login')
+    
   }
     return(<>
     <header className={style.header}>
@@ -24,6 +32,7 @@ export function Header(){
         <div className={style.headerNav}>
             <div className={style.headerNavItem}>
             <HomeFilled style={{fontSize:"32px", color:"#678098",cursor:"pointer"}}/>
+            <LogoutOutlined style={{fontSize:"32px", color:"#678098",cursor:"pointer"}} onClick={()=>logout()}/>
             </div>
         </div>
     </header>

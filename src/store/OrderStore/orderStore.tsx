@@ -1,7 +1,9 @@
 import { IOrderItem } from "@/interface/orderItem"
 import { create } from "zustand"
 import { useEmployeeStore } from "../EmployeeStore/EmployeeStore";
-
+import { IProductTable } from "@/interface/productTable";
+import { devtools, persist } from 'zustand/middleware'
+import { IBasicUnit } from "@/interface/basicUnit";
 
 
 interface IOrderStore  {
@@ -12,6 +14,10 @@ interface IOrderStore  {
     updateOrderById: (id: number, updatedOrder: Partial<IOrderItem>) => void;
     deleteOrderInTable: (id:number) => void | undefined
     getOrderById: (id:number) => IOrderItem | undefined
+
+    setProductInOrder: (orderId:number, product:IProductTable) => void
+    updateProductInOrder: (orderId:number,productId:number, updatedProduct: Partial<IProductTable>) => void
+    deleteProductInOrder: (orderId:number,productId:number) => void
 }
 
 
@@ -30,7 +36,7 @@ export const useOrderStore = create<IOrderStore>((set,get) => ({
           {
           id: 1,
           product: {
-              id: 1,
+              product_id: 1,
               name: "Товар 1",
               basicUnit: {
                   id: 1,
@@ -179,8 +185,48 @@ export const useOrderStore = create<IOrderStore>((set,get) => ({
     },
 
    
+    setProductInOrder: (orderId, product) => {
+      set((state)=>(
+        {
+          orders: state.orders.map((order) => order.id === orderId ? {
+            ...order,
+            productOrder:[...order.productOrder as IProductTable[], product]
+          }:
+          order,
+        )
+        }
+      ))
+    },
 
+    updateProductInOrder:(orderId, productId,updatedProduct) => {
+      set((state)=>(
+        {
+          orders: state.orders.map((order) => order.id === orderId ? {
+            ...order,
+            productOrder:order.productOrder?.map((product) => product.id === productId ? {
+              ...product,
+              count:updatedProduct.count as number,
+              unitProductTable:updatedProduct.unitProductTable as IBasicUnit,
+              doctorParlor:updatedProduct.doctorParlor
+            }:product)
+          }:
+          order,
+        )
+        }
+      ))
+    },
 
-    
+    deleteProductInOrder:(orderId, productId,) => {
+      set((state)=>(
+        {
+          orders: state.orders.map((order) => order.id === orderId ? {
+            ...order,
+            productOrder:order.productOrder?.filter((product) => product.id !== productId)
+          }:
+          order,
+        )
+        }
+      ))
+    } 
 }))
 

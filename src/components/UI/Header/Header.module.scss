@@ -23,5 +23,12 @@
             font-size: 20px;
         }
     }
+    .headerNav{
+        .headerNavItem{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+    }
     
 }

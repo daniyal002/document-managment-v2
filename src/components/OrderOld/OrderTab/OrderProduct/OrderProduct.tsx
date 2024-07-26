@@ -73,7 +73,7 @@ export function OrderProduct({keyTab,isModalOpen,handleOk,handleCancel}:Props){
     
     return(
         <>
-        <OrderModal handleCancel={handleCancelOrderModal} handleOk={handleOkOrderModal} isModalOpen={isOrderModalOpen} product={productWhenDoubleClick as IProductUnit} type="Добавление"/>
+        <OrderModal handleCancel={handleCancelOrderModal} handleOk={handleOkOrderModal} isModalOpen={isOrderModalOpen} product={productWhenDoubleClick as IProductUnit} keyTab={keyTab} type="Добавление"/>
          <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel} width={"90%"} footer={(_) => (
                   <>
                     <Button onClick={handleCancel}>Закрыть</Button>

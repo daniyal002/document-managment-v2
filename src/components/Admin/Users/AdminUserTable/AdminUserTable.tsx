@@ -68,8 +68,8 @@ export function AdminUserTable({users}:Props){
             title: 'Сотрудник',
             dataIndex: 'employee',
             key: 'employee',
-            sorter: (a:IUser, b:IUser) => compareByFullName(a.employee, b.employee),
-            render: (employee:IEmployee) => `${employee?.last_name} ${employee?.first_name} ${employee?.middle_name}`
+            sorter: (a:IUser, b:IUser) => a.employee.buyer_name.localeCompare(b.employee.buyer_name, 'ru'),
+            render: (employee:IEmployee) => employee.buyer_name
           },
           
           {

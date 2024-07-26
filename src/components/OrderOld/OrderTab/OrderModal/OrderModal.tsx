@@ -2,19 +2,21 @@ import { Selector } from "@/components/UI/Select/Selector";
 import { IProductUnit } from "@/interface/product";
 import {Button, Input, InputProps, Modal, SelectProps, Typography } from "antd";
 import { useEffect, useState } from "react";
+import { DoctorParlorTable } from "./DoctorParlorTable/DoctorParlorTable";
 
 
 interface Props{
-  defaultValuesCount?:number
-  defaultValuesUnit?:number
+    defaultValuesCount?:number
+    defaultValuesUnit?:number
     type?:string
     isModalOpen:any
     handleOk:any
     handleCancel:any
     product:IProductUnit
+    keyTab:string
 }
 
-export function OrderModal({isModalOpen, handleOk, handleCancel, product, type,defaultValuesCount,defaultValuesUnit}:Props){
+export function OrderModal({isModalOpen, handleOk, handleCancel, product, type,defaultValuesCount,defaultValuesUnit,keyTab}:Props){
 
   const multiplayUnitmeasurement = product?.unit_measurement?.name
 
@@ -26,6 +28,7 @@ export function OrderModal({isModalOpen, handleOk, handleCancel, product, type,d
   const [selectUnit, setSelectUnit] = useState<number>();
   const [enterCount, setEnterCount] = useState<number>(1);
   const [multiplayCoefficient,setMultiplayCoefficient] = useState<number>()
+  const [arrayTable, setArrayTable] = useState<{key:number}[]>([{key:1}])
 
   useEffect(()=>{
     const unit = product?.directory_unit_measurement?.find(item => item.unit_measurement.id === selectUnit)
@@ -55,11 +58,23 @@ export function OrderModal({isModalOpen, handleOk, handleCancel, product, type,d
   }
   
   const onOk = () => {
-    const unit = product.directory_unit_measurement.find(item => item.unit_measurement.id === selectUnit)
+    const isSelectUnit = selectUnit ? selectUnit : options[0].value
+    const unit = product.directory_unit_measurement.find(item => item.unit_measurement.id === isSelectUnit)
     handleOk(unit?.unit_measurement, enterCount)
     setSelectUnit(undefined);
     setEnterCount(1);
   };
+
+
+  const addArrayTable = () => {
+    const arrayTableIndex = {key:arrayTable.length + 1} 
+    setArrayTable([...arrayTable, arrayTableIndex])
+  }
+
+  const deleleItemTable = (index:number) => {
+    const filterTableIndex = arrayTable.filter(itemTable => itemTable.key !== index)
+    setArrayTable(filterTableIndex)
+  } 
 
   return (
     <>
@@ -68,6 +83,7 @@ export function OrderModal({isModalOpen, handleOk, handleCancel, product, type,d
           <>
             <Button onClick={()=>onOk()}>{type == "Изменение" ? "Изменить" : "Добавить" }</Button>
             <Button onClick={handleCancel}>Закрыть</Button>
+            <Button onClick={() => addArrayTable()}>Добавить врача</Button>
           </>
         )}>
         <div>
@@ -81,6 +97,9 @@ export function OrderModal({isModalOpen, handleOk, handleCancel, product, type,d
         </div>
         <div>
           <Typography>Количество в основной единице измерения: {`${multiplayCoefficient ? multiplayCoefficient : 1 } ${multiplayUnitmeasurement}`} </Typography>
+        </div>
+        <div>
+          <DoctorParlorTable arrayTable={arrayTable} deleleItemTable={deleleItemTable} keyTab={keyTab}/>
         </div>
       </Modal>
     </>

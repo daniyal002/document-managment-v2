@@ -32,7 +32,7 @@ export function AdminUserModal({isModalOpen, handleOk, handleCancel,type,default
     const employees = useEmployeeStore(state=>state.employees)
     const optionsEmployees = employees.map(item=>({
         value: item.id,
-        label: `${item.last_name} ${item.first_name} ${item.middle_name}`,
+        label: item.buyer_name,
     })) 
 
     const roles = useRoleStore(state=>state.roles)
@@ -59,7 +59,7 @@ export function AdminUserModal({isModalOpen, handleOk, handleCancel,type,default
     useEffect(() => {
         if(!defaultValuesLogin){
             const generateLogin = employees.find(employee => employee.id === selectEmployee)
-            setEnterLogin(`${generateLogin?.first_name}`)
+            setEnterLogin(`${generateLogin?.buyer_name}`)
         }else{
             setEnterLogin("")
         }

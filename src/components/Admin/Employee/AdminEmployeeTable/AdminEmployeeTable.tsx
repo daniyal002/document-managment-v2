@@ -1,7 +1,7 @@
 import { Button, ConfigProvider, Popconfirm, PopconfirmProps, Space, Table, TableColumnsType, message } from "antd";
 import { useState } from "react";
 import { IParlor } from "@/interface/parlor";
-import { IEmployee, IEmployeeFullName } from "@/interface/employee";
+import { IEmployee } from "@/interface/employee";
 import { useEmployeeStore } from "@/store/EmployeeStore/EmployeeStore";
 import { IPost } from "@/interface/post";
 import { AdminEmployeeModal } from "../AdminEmployeeModal/AdminEmployeeModal";
@@ -21,7 +21,8 @@ export function AdminEmployeeTable({employees}:Props){
 
 
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-    const [defaultValuesFullName, setDefaultValuesFullName] = useState<IEmployeeFullName>()
+    const [defaultValuesBuyerName, setDefaultValuesBuyerName] = useState<string>()
+    const [defaultValuesBuyerType, setDefaultValuesBuyerType] = useState<string>()
     const [defaultValuesParlor, setDefaultValuesParlor] = useState<IParlor[]>()
     const [defaultValuesPost, setDefaultValuesPost] = useState<IPost>()
     const [employeeId, setEmployeeId] = useState<number>()
@@ -31,9 +32,9 @@ export function AdminEmployeeTable({employees}:Props){
     setIsModalOpen(true);
   };
 
-  const handleOk = (fullName:IEmployeeFullName,parlor:IParlor[],post:IPost) => {
+  const handleOk = (buyer_name:string,buyer_type:string,parlor:IParlor[],post:IPost) => {
     setIsModalOpen(false);
-    updateEmployeeMutation({id:employeeId,first_name:fullName.firstName,last_name:fullName.lastName,middle_name:fullName.middleName,parlor,post})
+    updateEmployeeMutation({id:employeeId,buyer_name,buyer_type,parlor,post})
   };
 
   const handleCancel = () => {
@@ -56,23 +57,18 @@ export function AdminEmployeeTable({employees}:Props){
             key: 'id',
             sorter: (a:any, b:any) => a.id - b.id,
           },
+          
           {
-            title: 'Фамилия',
-            dataIndex: 'last_name',
-            key: 'last_name',
-            sorter: (a: any, b: any) => a.last_name.localeCompare(b.last_name, 'ru'),
+            title: 'Наименование',
+            dataIndex: 'buyer_name',
+            key: 'buyer_name',
+            sorter: (a: any, b: any) => a.buyer_name.localeCompare(b.buyer_name, 'ru'),
           },
           {
-            title: 'Имя',
-            dataIndex: 'first_name',
-            key: 'first_name',
-            sorter: (a: any, b: any) => a.first_name.localeCompare(b.first_name, 'ru'),
-          },
-          {
-            title: 'Отчество',
-            dataIndex: 'middle_name',
-            key: 'middle_name',
-            sorter: (a: any, b: any) => a.middle_name.localeCompare(b.middle_name, 'ru'),
+            title: 'Вид',
+            dataIndex: 'buyer_type',
+            key: 'buyer_type',
+            sorter: (a: any, b: any) => a.buyer_type.localeCompare(b.buyer_type, 'ru'),
           },
           {
             title: 'Кабинет',
@@ -87,7 +83,7 @@ export function AdminEmployeeTable({employees}:Props){
             title: 'Должность',
             dataIndex: 'post',
             key: 'post',
-            sorter: (a: any, b: any) => a.post.post.localeCompare(b.post.post, 'ru'),
+            sorter: (a: any, b: any) => a?.post?.post_name?.localeCompare(b?.post?.post_name, 'ru'),
             render: (post: IPost) => post?.post_name // Or any other suitable React element 
           },
           {
@@ -95,7 +91,7 @@ export function AdminEmployeeTable({employees}:Props){
             key: 'action',
             render:(_:any, record:IEmployee) => (
               <Space size="middle">
-                <Button type="dashed" onClick={() => {console.log(record);setEmployeeId(record.id);setDefaultValuesParlor(record.parlor);setDefaultValuesFullName({firstName:record.first_name,lastName:record.last_name,middleName:record.middle_name});setDefaultValuesPost(record.post);showModal()}} >Изменить</Button>
+                <Button type="dashed" onClick={() => {console.log(record);setEmployeeId(record.id);setDefaultValuesParlor(record.parlor);setDefaultValuesBuyerName(record.buyer_name);setDefaultValuesBuyerType(record.buyer_type);setDefaultValuesPost(record.post);showModal()}} >Изменить</Button>
                 <Popconfirm
                 title="Удаление сотрудника"
                 description="Вы точно хотите удалить сотрудника ?"
@@ -124,7 +120,7 @@ export function AdminEmployeeTable({employees}:Props){
             }
           }
         }}> 
-            <AdminEmployeeModal handleOk={handleOk} handleCancel={handleCancel} isModalOpen={isModalOpen} type='Изменение' defaultValuesFullName={defaultValuesFullName} defaultValuesParlor={defaultValuesParlor} defaultValuesPost={defaultValuesPost}/>
+            <AdminEmployeeModal handleOk={handleOk} handleCancel={handleCancel} isModalOpen={isModalOpen} type='Изменение' defaultValuesBuyerName={defaultValuesBuyerName} defaultValuesBuyerType={defaultValuesBuyerType} defaultValuesParlor={defaultValuesParlor} defaultValuesPost={defaultValuesPost}/>
             <Table columns={columns} dataSource={employees} pagination={{ pageSize: 10}}   scroll={{ y: "80vh" }} />
         </ConfigProvider>
         </>

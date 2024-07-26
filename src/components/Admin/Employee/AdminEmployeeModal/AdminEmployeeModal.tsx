@@ -2,7 +2,6 @@ import { Button, Input, Modal, InputProps, Typography, SelectProps } from 'antd'
 import style from './AdminEmployeeModal.module.scss'
 import { useEffect, useState } from 'react';
 import { Selector } from '@/components/UI/Select/Selector';
-import { IEmployeeFullName } from '@/interface/employee';
 import { useParlorStore } from '@/store/ParlorStore/ParlorStore';
 import { usePostStore } from '@/store/PostStore/PostStore';
 import { IParlor } from '@/interface/parlor';
@@ -10,7 +9,8 @@ import { IPost } from '@/interface/post';
 
 
 interface Props{
-    defaultValuesFullName?:IEmployeeFullName
+    defaultValuesBuyerName?:string
+    defaultValuesBuyerType?:string
     defaultValuesParlor?:IParlor[]
     defaultValuesPost?:IPost
     type?:"Создание" | "Изменение"
@@ -20,8 +20,9 @@ interface Props{
 
   }
 
-export function AdminEmployeeModal({isModalOpen, handleOk, handleCancel,type,defaultValuesFullName,defaultValuesParlor,defaultValuesPost}:Props){
-    const [enterFullName, setEnterFullName] = useState<IEmployeeFullName>();
+export function AdminEmployeeModal({isModalOpen, handleOk, handleCancel,type,defaultValuesBuyerType,defaultValuesParlor,defaultValuesPost,defaultValuesBuyerName}:Props){
+    const [enterBuyerName, setEnterBuyerName] = useState<string>();
+    const [selectBuyerType, setSelectBuyerType] = useState<string>();
     const [selectParlor, setSelectParlor] = useState<IParlor[] | null>()
     const [selectPost, setSelectPost] = useState<IPost | null>()
 
@@ -37,9 +38,24 @@ export function AdminEmployeeModal({isModalOpen, handleOk, handleCancel,type,def
         label: item.post_name,
     })) 
 
+    const optionsBuyerType:SelectProps['options'] = [
+        {
+            value: "parlor",
+            label: "Кабинет"
+        },
+        {
+            value: "employee",
+            label: "Сотрудник"
+        },
+        
+    ]
+
     useEffect(() => {
-        if (defaultValuesFullName) {
-            setEnterFullName(defaultValuesFullName);
+        if (defaultValuesBuyerName) {
+            setEnterBuyerName(defaultValuesBuyerName);
+        }
+        if (defaultValuesBuyerType) {
+            setSelectBuyerType(defaultValuesBuyerType);
         }
         if(defaultValuesParlor){
                 setSelectParlor(defaultValuesParlor)
@@ -48,14 +64,11 @@ export function AdminEmployeeModal({isModalOpen, handleOk, handleCancel,type,def
         if(defaultValuesPost){
                 setSelectPost(defaultValuesPost)
         }
-    }, [defaultValuesFullName,defaultValuesParlor,defaultValuesPost]);
+    }, [defaultValuesBuyerType,defaultValuesBuyerName,defaultValuesParlor,defaultValuesPost]);
 
     const onChangeInput: InputProps['onChange'] = (e) => {
         const { name, value } = e.target;
-        setEnterFullName((prevFullName) => ({
-          ...prevFullName,
-          [name]: value, // Обновление нужного поля
-        } as IEmployeeFullName ));
+        setEnterBuyerName(value)
       };
       const getParlorById = useParlorStore(state => state.getParlorById)
       const getPostById = usePostStore(state => state.getPostById)
@@ -72,12 +85,17 @@ export function AdminEmployeeModal({isModalOpen, handleOk, handleCancel,type,def
     const onChangeSelectPost = (value: number) =>{
         setSelectPost(getPostById(value))
     }
+
+    const onChangeSelectBuyerType = (value: string) =>{
+        setSelectBuyerType(value)
+    }
     
 
 
     const onOk = () => {
-        handleOk(enterFullName, selectParlor,selectPost)
-        setEnterFullName({firstName:"",lastName:"",middleName:""})
+        handleOk(enterBuyerName,selectBuyerType, selectParlor,selectPost)
+        setEnterBuyerName('')
+        setSelectBuyerType(undefined)
         setSelectParlor(undefined);
         setSelectPost(undefined)
     };
@@ -91,16 +109,12 @@ export function AdminEmployeeModal({isModalOpen, handleOk, handleCancel,type,def
               </>
             )}>
              <div>
-                <Typography.Title level={5}>Фамилия</Typography.Title>
-                <Input placeholder="Введите фамилию" type="text"  onChange={onChangeInput}  value={enterFullName?.lastName} name="lastName" required/>
+                <Typography.Title level={5}>Наименование</Typography.Title>
+                <Input placeholder="Наименование" type="text"  onChange={onChangeInput}  value={enterBuyerName} name="lastName" required/>
             </div>
             <div>
-                <Typography.Title level={5}>Имя</Typography.Title>
-                <Input placeholder="Введите имя" type="text" onChange={onChangeInput} value={enterFullName?.firstName} name="firstName" required/>
-            </div>
-            <div>
-                <Typography.Title level={5}>Отчество</Typography.Title>
-                <Input placeholder="Введите отчество" type="text" onChange={onChangeInput} value={enterFullName?.middleName} name="middleName" required/>
+                <Typography.Title level={5}>Вид</Typography.Title>
+                <Selector onChange={onChangeSelectBuyerType} optionArray={optionsBuyerType} placeholder="Выберите вид" value={selectBuyerType ? selectBuyerType : null} defaultValue={selectBuyerType ? selectBuyerType : null}/>
             </div>
             <div>
                 <Typography.Title level={5}>Кабинет</Typography.Title>
